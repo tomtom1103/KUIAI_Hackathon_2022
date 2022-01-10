@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit import cli as stcli
 from JL_mainpage import mainpage
 from JL_info import info
+from JL_EDA import eda
 import sys
 
 def journeylee_app():
@@ -16,7 +17,7 @@ def journeylee_app():
     st.title("Journey Lee: KUIAI Hackathon")
     st.sidebar.title("Journey Lee: KUIAI Hackathon")
     app_mode = st.sidebar.radio(
-        "Go to", ("Main Page", "Journey Lee Info")
+        "Go to", ("Main Page", "Explanatory Data Analysis", "About the Creators🚀")
     )
 
     st.sidebar.info(
@@ -28,9 +29,11 @@ def journeylee_app():
 
     )
 
-    if app_mode == "Gillajab-i!":
+    if app_mode == "Main Page":
         mainpage()
-    elif app_mode == "Gillajab-i Info":
+    elif app_mode == "Explanatory Data Analysis":
+        eda()
+    elif app_mode ==  "About the Creators🚀":
         info()
 
 if __name__ == "__main__":
