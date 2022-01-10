@@ -1,2 +1,4 @@
 #Preprocessing Files
 
+*.ipynb
+config.py
