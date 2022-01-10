@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit import cli as stcli
-from journeylee_mainpage import mainpage
-from journeylee_info import info
+from JL_mainpage import mainpage
+from JL_info import info
 import sys
 
 def journeylee_app():
@@ -21,7 +21,9 @@ def journeylee_app():
 
     st.sidebar.info(
         "Journey Lee: KUIAI Hackathon"
+        ""
         "Jong Hyun Lee"
+        ""
         "Woo Jun Lee"
 
     )
