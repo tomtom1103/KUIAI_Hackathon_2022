@@ -1,5 +1,6 @@
 #Preprocessing Files
 *.ipynb
 config.py
-건축시설_상권 데이터
-전처리완료 파일
+*.xlsx
+*.csv
+
