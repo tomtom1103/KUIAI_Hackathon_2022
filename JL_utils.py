@@ -1,7 +1,13 @@
-
+import pandas as pd
 import requests
 from haversine import haversine
 from config import kakao_api
+
+school_data = pd.read_csv(
+    ".\전처리완료 파일\school_data_loc.csv", encoding="cp949", index_col=0)
+subway_data = pd.read_csv(
+    ".\전처리완료 파일\subway_data_loc.csv", encoding="cp949", index_col=0)
+
 
 #KAKAO API 이용하여, 도로명 주소를 EPSG:4326 (aka WGS84, 위도 경도)로 변환
 def get_location(address):
@@ -24,13 +30,21 @@ def get_location_v2(df):
     for i in range(len(df)):
         try:
             temp_loc = get_location(df.loc[i]["도로명주소"])
-            df.loc[i, "위도"] = temp_loc[0]
-            df.loc[i, "경도"] = temp_loc[1]
+            df.loc[i, "위도"], df.loc[i, "경도"] = temp_loc
         except:
             print(f"error in {i}th row")
     return df
 
 
 #하버사인 공식을 이용하여 WGS84(위도 경도)를 바탕으로 거리를 구하는 함, 단위는 m
+#좌표로도, 주소로도 둘다 받을 수 있게 정의
 def get_distance(start, goal):
-    return haversine(get_location(start), get_location(goal),unit = 'm')
+    if type(start) == str:
+        type(start)
+        print(start)
+        #start = get_location(start)
+    if type(goal) == str:
+        type(goal)
+        print(goal)
+        #goal = get_location(goal)
+    return haversine(start, goal, unit='m')
