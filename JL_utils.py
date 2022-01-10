@@ -1,4 +1,3 @@
-
 import requests
 from haversine import haversine
 from config import kakao_api
