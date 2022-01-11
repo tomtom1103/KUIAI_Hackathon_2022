@@ -82,6 +82,7 @@ def get_distance(start, goal):
 발행처 : 서울특별시
  '''
 def commercial_area(com):
+
     com_dict = {'한식음식점': (500, 1000),
      '중식음식점': (500, 1000),
      '커피-음료': (500, 1000),
@@ -147,4 +148,7 @@ def commercial_area(com):
      '자전거 및 기타운송장비': (1000, 2000),
      '기타': (1000, 2000)}
 
-    return com_dict.keys(com)
+    if com_dict.get(com) == None:
+        return "ERROR"
+    else:
+        return com_dict[com]
