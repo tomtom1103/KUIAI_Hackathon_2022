@@ -32,6 +32,7 @@ def journeylee_app():
     if app_mode == "Main Page":
         mainpage()
     elif app_mode == "Explanatory Data Analysis":
+        #eda()
         eda()
     elif app_mode ==  "About the Creators🚀":
         info()
