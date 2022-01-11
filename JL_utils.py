@@ -8,6 +8,8 @@ school_data = pd.read_csv(
     ".\전처리완료 파일\school_data_loc.csv", encoding="cp949", index_col=0)
 subway_data = pd.read_csv(
     ".\전처리완료 파일\subway_data_loc.csv", encoding="cp949", index_col=0)
+mart_data = pd.read_csv(
+    ".\전처리완료 파일\mart_data_loc.csv", encoding="cp949", index_col=0)
 
 
 #KAKAO API 이용하여, 도로명 주소를 EPSG:4326 (aka WGS84, 위도 경도)로 변환
@@ -152,3 +154,84 @@ def commercial_area(com):
         return "ERROR"
     else:
         return com_dict[com]
+
+# 주변 학교 정보를 출력하는 함수
+def school_index_info(address_input, sectors):
+    division = commercial_area(sectors)  #1 2차 상권 기준
+    address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
+    school_data["temp_dist"] = ""  # 임시로 입력주소와 각 학교간의 거리를 기록할 행 추가
+    for i in range(len(school_data)):  # 각 학교와 입력주소간의 거리 계산 후 temp_dist에 등록
+        school_data.loc[i, "temp_dist"] = get_distance(
+            (school_data.loc[i, "위도"], school_data.loc[i, "경도"]),
+            address_input_loc)
+    school_data["temp_dist"] = pd.to_numeric(
+        school_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
+    min_dist_list = [school_data["temp_dist"].idxmin()
+                     ]  #가장 가까운 학교의 인덱스 리스트를 받음
+    primary_zone_list = school_data[
+        school_data["temp_dist"] <= division[0]].index.tolist(
+        )  #1차 상권에 포함되는 학교 인덱스 리스트
+    secondary_zone_list = school_data[
+        (school_data["temp_dist"] < division[1])  #2차 상권에 포함되는 학교 인덱스 리스트
+        & (school_data["temp_dist"] >= division[0])].index.tolist()
+    tertiary_zone_list = school_data[
+        school_data["temp_dist"] > division[1]].index.tolist(
+        )  #3차 상권에 포함되는 학교 인덱스 리스트
+    return [
+        min_dist_list, primary_zone_list, secondary_zone_list,
+        tertiary_zone_list
+    ]  #이를 모두 이중 리스트로 묶어 내보냄
+
+# 주변 지하철 정보를 출력하는 함수
+def subway_index_info(address_input, sectors):
+    division = commercial_area(sectors)  #1 2차 상권 기준
+    address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
+    subway_data["temp_dist"] = ""  # 임시로 입력주소와 각 지하철역 간의 거리를 기록할 행 추가
+    for i in range(len(subway_data)):  # 각 지하철 역과 입력주소간의 거리 계산 후 temp_dist에 등록
+        subway_data.loc[i, "temp_dist"] = get_distance(
+            (subway_data.loc[i, "위도"], subway_data.loc[i, "경도"]),
+            address_input_loc)
+    subway_data["temp_dist"] = pd.to_numeric(
+        subway_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
+    min_dist_list = [subway_data["temp_dist"].idxmin()
+                     ]  #가장 가까운 지하철 역의 인덱스 리스트를 받음
+    primary_zone_list = subway_data[
+        subway_data["temp_dist"] <= division[0]].index.tolist(
+        )  #1차 상권에 포함되는 지하철 인덱스 리스트
+    secondary_zone_list = subway_data[
+        (subway_data["temp_dist"] < division[1])  #2차 상권에 포함되는 지하철 인덱스 리스트
+        & (subway_data["temp_dist"] >= division[0])].index.tolist()
+    tertiary_zone_list = subway_data[
+        subway_data["temp_dist"] > division[1]].index.tolist(
+        )  #3차 상권에 포함되는 지하철 인덱스 리스트
+    return [
+        min_dist_list, primary_zone_list, secondary_zone_list,
+        tertiary_zone_list
+    ]  #이를 모두 이중 리스트로 묶어 내보냄
+
+# 주변 마트 정보를 출력하는 함수
+def mart_index_info(address_input, sectors):
+    division = commercial_area(sectors)  #1 2차 상권 기준
+    address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
+    mart_data["temp_dist"] = ""  # 임시로 입력주소와 각 마트 간의 거리를 기록할 행 추가
+    for i in range(len(subway_data)):  # 각 마트 역과 입력주소간의 거리 계산 후 temp_dist에 등록
+        subway_data.loc[i, "temp_dist"] = get_distance(
+            (subway_data.loc[i, "위도"], subway_data.loc[i, "경도"]),
+            address_input_loc)
+    subway_data["temp_dist"] = pd.to_numeric(
+        subway_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
+    min_dist_list = [mart_data["temp_dist"].idxmin()
+                     ]  #가장 가까운 마트 역의 인덱스 리스트를 받음
+    primary_zone_list = mart_data[
+        mart_data["temp_dist"] <= division[0]].index.tolist(
+        )  #1차 상권에 포함되는 마트 인덱스 리스트
+    secondary_zone_list = mart_data[
+        (mart_data["temp_dist"] < division[1])  #2차 상권에 포함되는 마트 인덱스 리스트
+        & (mart_data["temp_dist"] >= division[0])].index.tolist()
+    tertiary_zone_list = mart_data[
+        mart_data["temp_dist"] > division[1]].index.tolist(
+        )  #3차 상권에 포함되는 마트 인덱스 리스트
+    return [
+        min_dist_list, primary_zone_list, secondary_zone_list,
+        tertiary_zone_list
+    ]  #이를 모두 이중 리스트로 묶어 내보냄
