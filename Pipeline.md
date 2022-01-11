@@ -21,3 +21,10 @@ Data EDA:
 \
 \
 Streamlit App Development:
+\
+\
+EDA ideas
+각 구별 총 매출액 시각화
+매출: 추정매출
+
+업종별 차트 시각화
