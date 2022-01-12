@@ -1,4 +1,4 @@
-from JL_utils import commercial_area, get_location_naver
+from JL_utils import commercial_area, get_location_naver, subway_index_info, school_index_info, mart_index_info, get_nearest_com, get_comm_type
 
 
 # input 부분 정의
@@ -26,20 +26,26 @@ def input_engine(address = "서울특별시 성북구 고려대로26길 45-4", s
 
 
 if __name__ == "__main__":
-    a = input_engine()
-    #지하철, 학교, 마트 1,2,차 갯수 받아옴
-    #근처 상권 지정
-    #골목,전통,상권인지 나와야댐
-    #건축물 생애이력 데이터 넣어줌
+    position, sector= input_engine() #주소와 업종명 받아서 좌표와 업종명 보냄
+    # 지하철, 학교, 마트 1,2,차 갯수 받아옴
+    school_index_data = school_index_info(position,sector)
+    subway_index_data = subway_index_info(position,sector)
+    mart_index_data = mart_index_info(position,sector)
+
+    sch1, sch2 = len(school_index_data[1]), len(school_index_data[2])
+    sub1, sub2 = len(subway_index_data[1]), len(subway_index_data[2])
+    mart1, mart2 = len(mart_index_data[1]), len(mart_index_data[2])
+
+    # 근처 상권 지정
+    com_zone = get_nearest_com(position)
+
+    # 상권의 Type 지정
+    com_type = get_comm_type(com_zone)
+
+    #건축물 생애이력 데이터 (일반/집합), (용도)
+
+
+
+
     #이를 모델에 넣어줌
     #결과 plot
-
-
-
-for i in tqdm(range (len(df_comb_part_aug))):
-    temp_up=com_list[i%63]
-    df_comb_part_aug.loc[i,"업종"]=temp_up
-    temp_school_info, temp_subway_info, temp_mart_info = school_index_info((df_comb_part_aug.loc[i]["위도"],df_comb_part_aug.loc[i]["경도"]),temp_up), subway_index_info((df_comb_part_aug.loc[i]["위도"],df_comb_part_aug.loc[i]["경도"]),temp_up), mart_index_info((df_comb_part_aug.loc[i]["위도"],df_comb_part_aug.loc[i]["경도"]),temp_up)
-    df_comb_part_aug.loc[i,"1차_지하철_수"],df_comb_part_aug.loc[i,"2차_지하철_수"] = len(temp_subway_info[1]), len(temp_subway_info[2])
-    df_comb_part_aug.loc[i,"1차_학교_수"], df_comb_part_aug.loc[i,"2차_학교_수"] = len(temp_school_info[1]), len(temp_school_info[2])
-    df_comb_part_aug.loc[i,"1차_마트_수"], df_comb_part_aug.loc[i,"2차_마트_수"] = len(temp_mart_info[1]), len(temp_mart_info[2])

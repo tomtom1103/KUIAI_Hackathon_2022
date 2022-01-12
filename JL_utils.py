@@ -318,3 +318,12 @@ def get_nearest_com(address_input):
     com_area_data["temp_dist"] = pd.to_numeric(com_area_data["temp_dist"])
     return com_area_data.loc[com_area_data["temp_dist"].idxmin(),"상권_코드_명"] #가장 가까운 상권명을 return
 
+#상권 구분 결과 return 하는 함수
+def get_comm_type(comm):
+    com_area_data = pd.read_csv(".\전처리완료 파일\상권좌표.csv",
+                                encoding="cp949",
+                                usecols=["상권_코드_명", "상권_구분_코드_명"])
+
+    return com_area_data[com_area_data["상권_코드_명"] == comm]["상권_구분_코드_명"]
+
+# 건축물 생애이력 데이터 (일반/집합), (용도) return 하는 함수
