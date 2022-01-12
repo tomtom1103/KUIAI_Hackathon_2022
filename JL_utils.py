@@ -161,7 +161,8 @@ def commercial_area(com):
 # 주변 학교 정보를 출력하는 함수
 def school_index_info(address_input, sectors):
     division = commercial_area(sectors)  #1 2차 상권 기준
-    address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
+    if address_input is str:
+        address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
     school_data["temp_dist"] = ""  # 임시로 입력주소와 각 학교간의 거리를 기록할 행 추가
     for i in range(len(school_data)):  # 각 학교와 입력주소간의 거리 계산 후 temp_dist에 등록
         school_data.loc[i, "temp_dist"] = get_distance(
@@ -188,7 +189,8 @@ def school_index_info(address_input, sectors):
 # 주변 지하철 정보를 출력하는 함수
 def subway_index_info(address_input, sectors):
     division = commercial_area(sectors)  #1 2차 상권 기준
-    address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
+    if address_input is str:
+        address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
     subway_data["temp_dist"] = ""  # 임시로 입력주소와 각 지하철역 간의 거리를 기록할 행 추가
     for i in range(len(subway_data)):  # 각 지하철 역과 입력주소간의 거리 계산 후 temp_dist에 등록
         subway_data.loc[i, "temp_dist"] = get_distance(
@@ -215,7 +217,8 @@ def subway_index_info(address_input, sectors):
 # 주변 마트 정보를 출력하는 함수
 def mart_index_info(address_input, sectors):
     division = commercial_area(sectors)  #1 2차 상권 기준
-    address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
+    if address_input is str:
+        address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
     mart_data["temp_dist"] = ""  # 임시로 입력주소와 각 마트 간의 거리를 기록할 행 추가
     for i in range(len(subway_data)):  # 각 마트 역과 입력주소간의 거리 계산 후 temp_dist에 등록
         subway_data.loc[i, "temp_dist"] = get_distance(
