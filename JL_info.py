@@ -5,7 +5,7 @@ from PIL import Image
 
 def info():
     st.subheader("About the Creators🚀")
-    df = pd.read_pickle("jl.pickle")
+    df = pd.read_pickle("data_upload/jl.pickle")
 
 
     st.markdown('##### Journey Lee?')
