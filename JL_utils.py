@@ -275,5 +275,6 @@ def get_nearest_com(address_input):
         com_area_data.loc[i, "temp_dist"] = get_distance(
             address_input,
             (com_area_data.loc[i, "위도"], com_area_data.loc[i, "경도"])) #각 상권마다의 거리를 계산해서 기록
+    com_area_data["temp_dist"] = pd.to_numeric(com_area_data["temp_dist"])
     return com_area_data.loc[com_area_data["temp_dist"].idxmin(),"상권_코드_명"] #가장 가까운 상권명을 return
 
