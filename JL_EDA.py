@@ -3,8 +3,11 @@ import pandas as pd
 import numpy as np
 import pydeck as pdk
 import math
+from config import map
 
 #sales_eda_json_sparse 는 데이터 분포도 확인용.
+
+MAPBOX_API_KEY = map
 
 def sales_hexagon(): #위도경도에 상권이 몇개있는지. 총 13만개
 
@@ -43,16 +46,16 @@ def sales_hexagon(): #위도경도에 상권이 몇개있는지. 총 13만개
 
 
 def normalized_polygon(): #각 동별 매출 정규화
-    #df = pd.read_excel("상권 추정매출_2nd_eda.xlsx")
-    df = ('https://raw.githubusercontent.com/tomtom1103/KUIAI_Hackathon_2022/main/data_upload/seouleda.json')
-    #df = pd.read_pickle('seouldata.pickle')
+    df = pd.read_pickle('data_upload/sales_eda_3rd.pkl')
+
     layer = pdk.Layer(
-        'PolygonLayer',  # 사용할 Layer 타입
-        df,  # 시각화에 쓰일 데이터프레임
-        get_polygon='coordinates',  # geometry 정보를 담고있는 컬럼 이름
-        get_fill_color='[0, 255*지역별매출정규화, 0]',  # 각 데이터 별 rgb 또는 rgba 값 (0~255)
-        pickable=True,  # 지도와 interactive 한 동작 on
-        auto_highlight=True  # 마우스 오버(hover) 시 박스 출력
+        'PolygonLayer',
+        df,
+        get_polygon='coordinates',
+        get_fill_color='[0, 255*지역별매출정규화,0]',
+        pickable=True,
+        auto_highlight=True
+
     )
 
     # Set the viewport location
@@ -63,7 +66,11 @@ def normalized_polygon(): #각 동별 매출 정규화
         zoom=10)
 
     # Render
-    r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+    r = pdk.Deck(layers=[layer],
+                 map_style='mapbox://styles/mapbox/outdoors-v11',
+                 #mapbox_key=MAPBOX_API_KEY,
+                 map_provider='mapbox',
+                 initial_view_state=view_state)
     return r
 
 def sales_scatterplot():
@@ -85,7 +92,9 @@ def sales_scatterplot():
         latitude=center[1],
         zoom=10)
 
-    r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+    r = pdk.Deck(layers=[layer],
+                 initial_view_state=view_state,
+                 )
     return r
 
 def sales_heatmap():
