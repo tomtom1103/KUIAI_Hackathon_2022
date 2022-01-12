@@ -36,3 +36,10 @@ if __name__ == "__main__":
 
 
 
+for i in tqdm(range (len(df_comb_part_aug))):
+    temp_up=com_list[i%63]
+    df_comb_part_aug.loc[i,"업종"]=temp_up
+    temp_school_info, temp_subway_info, temp_mart_info = school_index_info((df_comb_part_aug.loc[i]["위도"],df_comb_part_aug.loc[i]["경도"]),temp_up), subway_index_info((df_comb_part_aug.loc[i]["위도"],df_comb_part_aug.loc[i]["경도"]),temp_up), mart_index_info((df_comb_part_aug.loc[i]["위도"],df_comb_part_aug.loc[i]["경도"]),temp_up)
+    df_comb_part_aug.loc[i,"1차_지하철_수"],df_comb_part_aug.loc[i,"2차_지하철_수"] = len(temp_subway_info[1]), len(temp_subway_info[2])
+    df_comb_part_aug.loc[i,"1차_학교_수"], df_comb_part_aug.loc[i,"2차_학교_수"] = len(temp_school_info[1]), len(temp_school_info[2])
+    df_comb_part_aug.loc[i,"1차_마트_수"], df_comb_part_aug.loc[i,"2차_마트_수"] = len(temp_mart_info[1]), len(temp_mart_info[2])
