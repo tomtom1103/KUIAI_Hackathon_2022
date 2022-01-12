@@ -4,7 +4,7 @@ from haversine import haversine
 from config import kakao_api, naver_client_id, naver_client_secert
 from urllib import parse
 
-school_data = pd.read_csv(
+'''school_data = pd.read_csv(
     ".\전처리완료 파일\school_data_loc.csv", encoding="cp949", index_col=0)
 subway_data = pd.read_csv(
     ".\전처리완료 파일\subway_data_loc.csv", encoding="cp949", index_col=0)
@@ -12,7 +12,7 @@ mart_data = pd.read_csv(
     ".\전처리완료 파일\mart_data_loc.csv", encoding="cp949", index_col=0)
 com_area_data = pd.read_csv(".\전처리완료 파일\상권좌표.csv",
                           encoding="cp949",
-                          usecols=["상권_코드_명","위도","경도"])
+                          usecols=["상권_코드_명","위도","경도"])'''
 
 
 #KAKAO API 이용하여, 도로명 주소를 EPSG:4326 (aka WGS84, 위도 경도)로 변환
@@ -160,6 +160,8 @@ def commercial_area(com):
 
 # 주변 학교 정보를 출력하는 함수
 def school_index_info(address_input, sectors):
+    school_data = pd.read_csv(
+        ".\전처리완료 파일\school_data_loc.csv", encoding="cp949", usecols=["위도","경도"])
     division = commercial_area(sectors)  #1 2차 상권 기준
     if address_input is str:
         address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
@@ -190,6 +192,8 @@ def school_index_info(address_input, sectors):
 
 # 주변 지하철 정보를 출력하는 함수
 def subway_index_info(address_input, sectors):
+    subway_data = pd.read_csv(
+        ".\전처리완료 파일\subway_data_loc.csv", encoding="cp949", usecols=["위도","경도"])
     division = commercial_area(sectors)  #1 2차 상권 기준
     if address_input is str:
         address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
@@ -220,18 +224,20 @@ def subway_index_info(address_input, sectors):
 
 # 주변 마트 정보를 출력하는 함수
 def mart_index_info(address_input, sectors):
+    mart_data = pd.read_csv(
+        ".\전처리완료 파일\mart_data_loc.csv", encoding="cp949", usecols=["위도","경도"])
     division = commercial_area(sectors)  #1 2차 상권 기준
     if address_input is str:
         address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
     else:
         address_input_loc = address_input
     mart_data["temp_dist"] = ""  # 임시로 입력주소와 각 마트 간의 거리를 기록할 행 추가
-    for i in range(len(subway_data)):  # 각 마트 역과 입력주소간의 거리 계산 후 temp_dist에 등록
-        subway_data.loc[i, "temp_dist"] = get_distance(
-            (subway_data.loc[i, "위도"], subway_data.loc[i, "경도"]),
+    for i in range(len(mart_data)):  # 각 마트 역과 입력주소간의 거리 계산 후 temp_dist에 등록
+        mart_data.loc[i, "temp_dist"] = get_distance(
+            (mart_data.loc[i, "위도"], mart_data.loc[i, "경도"]),
             address_input_loc)
-    subway_data["temp_dist"] = pd.to_numeric(
-        subway_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
+    mart_data["temp_dist"] = pd.to_numeric(
+        mart_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
     min_dist_list = [mart_data["temp_dist"].idxmin()
                      ]  #가장 가까운 마트 역의 인덱스 리스트를 받음
     primary_zone_list = mart_data[
@@ -256,6 +262,10 @@ def school_info(index_list=[], *args):
        '산업체특별학급존재여부', '고등학교일반실업구분명', '특수목적고등학교계열명', '입시전후기구분명', '주야구분명',
        '설립일자', '개교기념일', '시도교육청코드', '시도교육청명', '소재지명', '주야과정', '계열명', '학과명',
        '적재일시', '위도', '경도', 'temp_dist']'''
+
+    school_data = pd.read_csv(
+        ".\전처리완료 파일\school_data_loc.csv", encoding="cp949", index_col=0)
+
     return school_data.loc[index_list][list(args)]
 
     # 예시 school_info([1,2,3],'학교종류명', '학교명','도로명주소')
@@ -263,6 +273,9 @@ def school_info(index_list=[], *args):
 # 지하철역 데이터 보내주는 함수
 def subway_info(index_list=[], *args):
     '''['역번호', '호선', '역명', '역전화번호', '도로명주소', '위도', '경도']'''
+    subway_data = pd.read_csv(
+        ".\전처리완료 파일\subway_data_loc.csv", encoding="cp949", index_col=0)
+
     return subway_data.loc[index_list][list(args)]
 
     # 예시 subway_info([1,2,3],'호선', '역명','도로명주소')
@@ -273,12 +286,17 @@ def mart_info(index_list=[], *args):
        '상세영업상태명', '전화번호', '소재지면적', '소재지우편번호', '지번주소', '도로명주소', '도로명우편번호',
        '사업장명', '최종수정일자', '데이터갱신구분', '데이터갱신일자', '업태구분명', '좌표정보(X)', '좌표정보(Y)',
        '점포구분명', '위도', '경도']'''
+    mart_data = pd.read_csv(
+        ".\전처리완료 파일\mart_data_loc.csv", encoding="cp949", index_col=0)
     return mart_data.loc[index_list][list(args)]
 
     # 예시 mart_info([1,2,3],'사업장명','전화번호','도로명주소')
 
 #가까운 상권을 return 하는 함수
 def get_nearest_com(address_input):
+    com_area_data = pd.read_csv(".\전처리완료 파일\상권좌표.csv",
+                                encoding="cp949",
+                                usecols=["상권_코드_명", "위도", "경도"])
     com_area_data["temp_dist"]="" #임시로 상권과 입력위치간의 거리를 기록하는 column을 만듬
     for i in range(len(com_area_data)):
         com_area_data.loc[i, "temp_dist"] = get_distance(
