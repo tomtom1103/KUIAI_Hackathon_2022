@@ -3,6 +3,8 @@ import requests
 from haversine import haversine
 from config import kakao_api, naver_client_id, naver_client_secert
 from urllib import parse
+from numpy import cos, sin, arcsin, sqrt
+from math import radians
 
 '''school_data = pd.read_csv(
     ".\전처리완료 파일\school_data_loc.csv", encoding="cp949", index_col=0)
@@ -79,6 +81,20 @@ def get_distance(start, goal):
         #goal = get_location(goal)
     return haversine(start, goal, unit='m')
 
+
+#벡터방식의 거리구하기
+def get_distance_vect(row,lon,lat):
+    lon1 = lon
+    lat1 = lat
+    lon2 = row['위도']
+    lat2 = row['경도']
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * arcsin(sqrt(a))
+    m = 6.367 * c
+    return m
 
 #업종별 1,2,3차 상권 거리 구간 분류 함수
 '''
@@ -182,12 +198,11 @@ def school_index_info(address_input, sectors):
     secondary_zone_list = school_data[
         (school_data["temp_dist"] < division[1])  #2차 상권에 포함되는 학교 인덱스 리스트
         & (school_data["temp_dist"] >= division[0])].index.tolist()
-    tertiary_zone_list = school_data[
+    '''tertiary_zone_list = school_data[
         school_data["temp_dist"] > division[1]].index.tolist(
-        )  #3차 상권에 포함되는 학교 인덱스 리스트
+        )'''  #3차 상권에 포함되는 학교 인덱스 리스트
     return [
         min_dist_list, primary_zone_list, secondary_zone_list,
-        tertiary_zone_list
     ]  #이를 모두 이중 리스트로 묶어 내보냄
 
 # 주변 지하철 정보를 출력하는 함수
@@ -214,12 +229,11 @@ def subway_index_info(address_input, sectors):
     secondary_zone_list = subway_data[
         (subway_data["temp_dist"] < division[1])  #2차 상권에 포함되는 지하철 인덱스 리스트
         & (subway_data["temp_dist"] >= division[0])].index.tolist()
-    tertiary_zone_list = subway_data[
+    '''tertiary_zone_list = subway_data[
         subway_data["temp_dist"] > division[1]].index.tolist(
-        )  #3차 상권에 포함되는 지하철 인덱스 리스트
+        ) ''' #3차 상권에 포함되는 지하철 인덱스 리스트
     return [
-        min_dist_list, primary_zone_list, secondary_zone_list,
-        tertiary_zone_list
+        min_dist_list, primary_zone_list, secondary_zone_list
     ]  #이를 모두 이중 리스트로 묶어 내보냄
 
 # 주변 마트 정보를 출력하는 함수
@@ -246,12 +260,11 @@ def mart_index_info(address_input, sectors):
     secondary_zone_list = mart_data[
         (mart_data["temp_dist"] < division[1])  #2차 상권에 포함되는 마트 인덱스 리스트
         & (mart_data["temp_dist"] >= division[0])].index.tolist()
-    tertiary_zone_list = mart_data[
+    '''tertiary_zone_list = mart_data[
         mart_data["temp_dist"] > division[1]].index.tolist(
-        )  #3차 상권에 포함되는 마트 인덱스 리스트
+        )'''  #3차 상권에 포함되는 마트 인덱스 리스트
     return [
-        min_dist_list, primary_zone_list, secondary_zone_list,
-        tertiary_zone_list
+        min_dist_list, primary_zone_list, secondary_zone_list
     ]  #이를 모두 이중 리스트로 묶어 내보냄
 
 
