@@ -10,6 +10,9 @@ subway_data = pd.read_csv(
     ".\전처리완료 파일\subway_data_loc.csv", encoding="cp949", index_col=0)
 mart_data = pd.read_csv(
     ".\전처리완료 파일\mart_data_loc.csv", encoding="cp949", index_col=0)
+com_area_data = pd.read_csv(".\전처리완료 파일\상권좌표.csv",
+                          encoding="cp949",
+                          usecols=["상권_코드_명","위도","경도"])
 
 
 #KAKAO API 이용하여, 도로명 주소를 EPSG:4326 (aka WGS84, 위도 경도)로 변환
@@ -39,7 +42,7 @@ def get_location_v2(df):
     return df
 
 
-def get_location_naver(address):
+def get_location_naver(address): #네이버 지도 api 를 이용하여 geocode를 받아오는 함수
     url = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=' + parse.quote(
         address)
     header = {
@@ -264,4 +267,13 @@ def mart_info(index_list=[], *args):
     return mart_data.loc[index_list][list(args)]
 
     # 예시 mart_info([1,2,3],'사업장명','전화번호','도로명주소')
+
+#가까운 상권을 return 하는 함수
+def get_nearest_com(address_input):
+    com_area_data["temp_dist"]="" #임시로 상권과 입력위치간의 거리를 기록하는 column을 만듬
+    for i in range(len(com_area_data)):
+        com_area_data.loc[i, "temp_dist"] = get_distance(
+            address_input,
+            (com_area_data.loc[i, "위도"], com_area_data.loc[i, "경도"])) #각 상권마다의 거리를 계산해서 기록
+    return com_area_data.loc[com_area_data["temp_dist"].idxmin(),"상권_코드_명"] #가장 가까운 상권명을 return
 
