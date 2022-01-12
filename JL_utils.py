@@ -151,7 +151,7 @@ def commercial_area(com):
      '미곡판매': (1000, 2000),
      '완구': (500, 1000),
      '자전거 및 기타운송장비': (1000, 2000),
-     '기타': (1000, 2000)}
+     }
 
     if com_dict.get(com) == None:
         return "ERROR"
