@@ -226,12 +226,12 @@ def mart_index_info(address_input, sectors):
     else:
         address_input_loc = address_input
     mart_data["temp_dist"] = ""  # 임시로 입력주소와 각 마트 간의 거리를 기록할 행 추가
-    for i in range(len(subway_data)):  # 각 마트 역과 입력주소간의 거리 계산 후 temp_dist에 등록
-        subway_data.loc[i, "temp_dist"] = get_distance(
-            (subway_data.loc[i, "위도"], subway_data.loc[i, "경도"]),
+    for i in range(len(mart_data)):  # 각 마트 역과 입력주소간의 거리 계산 후 temp_dist에 등록
+       mart_data.loc[i, "temp_dist"] = get_distance(
+            (mart_data.loc[i, "위도"], mart_data.loc[i, "경도"]),
             address_input_loc)
-    subway_data["temp_dist"] = pd.to_numeric(
-        subway_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
+    mart_data["temp_dist"] = pd.to_numeric(
+        mart_data["temp_dist"])  #temp dist column을 숫자형으로 바꿔줌
     min_dist_list = [mart_data["temp_dist"].idxmin()
                      ]  #가장 가까운 마트 역의 인덱스 리스트를 받음
     primary_zone_list = mart_data[
