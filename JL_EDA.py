@@ -9,7 +9,7 @@ from visualization import refactor
 
 #sales_eda_json_sparse 는 데이터 분포도 확인용.
 
-MAPBOX_API_KEY = map
+MAPBOX_API_KEY = st.secrets['map']
 
 def sales_hexagon(): #위도경도에 상권이 몇개있는지. 총 13만개
 

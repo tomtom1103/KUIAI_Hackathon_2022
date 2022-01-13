@@ -7,7 +7,7 @@ from main_engine import main_engine
 import pydeck as pdk
 from config import map
 
-MAPBOX_API_KEY = map
+MAPBOX_API_KEY = st.secrets['map']
 
 def main():
     #df = pd.read_pickle('data_upload/sales_eda_full.pkl')

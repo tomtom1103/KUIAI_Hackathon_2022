@@ -5,6 +5,7 @@ from config import kakao_api, naver_client_id, naver_client_secert
 from urllib import parse
 from numpy import cos, sin, arcsin, sqrt
 from math import radians
+import streamlit as st
 
 '''school_data = pd.read_csv(
     ".\data_upload_buzz\school_data_loc.csv", encoding="cp949", index_col=0)
@@ -21,7 +22,7 @@ com_area_data = pd.read_csv(".\data_upload_buzz\상권좌표.csv",
 def get_location(address):
     result = ""
     url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + address
-    header = {'Authorization': 'KakaoAK ' + kakao_api}
+    header = {'Authorization': 'KakaoAK ' + st.secrets['kakao_api']}
     # api는 configure파일에 숨겨놓기!
     r = requests.get(url, headers=header)
 
@@ -49,8 +50,8 @@ def get_location_naver(address):  # 네이버 지도 api 를 이용하여 geocod
     url = 'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=' + parse.quote(
         address)
     header = {
-        'X-NCP-APIGW-API-KEY-ID': naver_client_id,
-        'X-NCP-APIGW-API-KEY': naver_client_secert
+        'X-NCP-APIGW-API-KEY-ID': st.secrets['naver_client_id'],
+        'X-NCP-APIGW-API-KEY': st.secrets['naver_client_secert']
     }
     r = requests.get(url, headers=header)
 
