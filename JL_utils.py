@@ -344,3 +344,17 @@ def get_building_info(address):
                                 usecols=["도로명주소","일반/집합 구분", "용도"])
 
     return building_data[building_data["도로명주소"]=="서울특별시 마포구 양화로 164"][["일반/집합 구분","용도"]].values.tolist()[0]
+
+
+#메인 주변 500m 반경 위경도 받아오는 함수
+
+def around_place(address):
+    df_full = pd.read_csv("data_upload_buzz/df_concat.csv", encoding="cp949", usecols= ["도로명주소","위도","경도"])
+    df_full = df_full[df_full["도로명주소"].str.contains(address.split()[1])]
+    df_full.reset_index(inplace=True, drop=True)
+    df_full["거리"] = ""
+    position = get_location_naver(address)
+    for i in range(len(df_full)):
+        df_full.loc[i, "거리"] = get_distance(position, (df_full.loc[i, "위도"], df_full.loc[i, "경도"]))
+
+    return df_full[df_full["거리"]<=500][["위도","경도","도로명주소"]].values.tolist()
