@@ -5,7 +5,7 @@ from JL_info import info
 from JL_EDA import eda
 import sys
 
-def journeylee_app():
+def journeylee_app(): #웹앱 구동함수
     #st.set_page_config(layout="wide")
     st.markdown("""
         <style>
@@ -28,12 +28,12 @@ def journeylee_app():
         '''
 
     )
-
-    if app_mode == "Main Page":
+    # 웹앱 좌측 radio button 정의부분
+    if app_mode == "Main Page": #웹앱 메인페이지
         mainpage()
-    elif app_mode == "Explanatory Data Analysis":
+    elif app_mode == "Explanatory Data Analysis": #웹앱 EDA 페이지
         eda()
-    elif app_mode ==  "About the Creators🚀":
+    elif app_mode ==  "About the Creators🚀": #웹앱 Info 페이지
         info()
 
 if __name__ == "__main__":

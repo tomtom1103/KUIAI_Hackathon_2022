@@ -8,6 +8,8 @@ import pandas as pd
 #to_cood_type인자: 변형희망좌표계. (ex: lat/long is epsg:4326), str
 #original_coord_colname인자: 기존 데이터 좌표계의 column names, str
 
+
+#해당 함수는 웹앱 구동과 상관없지만, 좌표계를 변환하는 전처리 과정에서 사용하였습니다.
 def coordinate_transformer(data, from_coord_type, to_coord_type, original_xcoord_colname, original_ycoord_colname):
     print("Check type of original coordinate data. ex: epsg:2097(인허가정보.csv), epsg:5181(상권영역.csv).")
     print("Check type of target coordinate data. ex: lat/long is epsg:4326")

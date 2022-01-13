@@ -9,10 +9,8 @@ import pydeck as pdk
 MAPBOX_API_KEY = st.secrets['map']
 
 def main():
-    #df = pd.read_pickle('data_upload/sales_eda_full.pkl')
-    #heat = pd.read_pickle('data_upload/sales_eda_json_sparse.pkl')
-    #seoul_df = pd.read_pickle('data_upload/seoul_coord_data.pkl')
-    storetype_df = pd.read_pickle('data_upload/moneypertypeofservice.pkl')
+
+    storetype_df = pd.read_pickle('data_upload/moneypertypeofservice.pkl') #업종별 분기당 매출 Data
     storetype = storetype_df['업종'].unique().tolist()
 
     with st.form("main1"):
@@ -25,14 +23,15 @@ def main():
             st.stop()
 
 
-    coords = main_engine(road,store)
+    coords = main_engine(road,store) #main engine 구동함수. 인자는 웹앱상 사용자에게서 받은 str 로 입력
 
-    heat = pd.DataFrame(columns=(['lat','lng','eval_val']))
+    heat = pd.DataFrame(columns=(['lat','lng','eval_val'])) #시각화에 사용할 dataframe 정의.
     for i in range(len(coords)):
-        heat.loc[i,["lat","lng","eval_val"]] = coords[i][0][0], coords[i][0][1], coords[i][1]
+        heat.loc[i,["lat","lng","eval_val"]] = coords[i][0][0], coords[i][0][1], coords[i][1] #main engine 구동함수에서 받은 해당 점포의 예상매출값과 반경 500미터 점포들의 예상매출값 indexing
 
-    heat['eval_norm'] = heat['eval_val']/heat['eval_val'].max()
+    heat['eval_norm'] = heat['eval_val']/heat['eval_val'].max() #시각화용 예상매출액 정규화
 
+    #사용자가 입력한 도로명주소 반경 500미터 흰색 column
     layer1 = pdk.Layer(
         'ColumnLayer',
         data=heat,
@@ -45,6 +44,7 @@ def main():
         auto_highlight=True
     )
 
+    #사용자가 입력한 도로명주소 붉은 column
     layer2 = pdk.Layer(
         'ColumnLayer',
         data=heat.iloc[:1],
@@ -57,9 +57,7 @@ def main():
         auto_highlight=True
     )
 
-
-    #center = [126.986, 37.565]
-    center = [heat.loc[0][1], heat.loc[0][0]]
+    center = [heat.loc[0][1], heat.loc[0][0]] #시각화 지도의 시작점을 사용자의 도로명주소로 initialize
     view_state = pdk.ViewState(
         longitude=center[0],
         latitude=center[1],
@@ -67,6 +65,7 @@ def main():
         pitch=10
         )
 
+    #시각화용 tooltip. column 위 cursor 위치시 정보표기
     tooltip = {
         "html": "위도:<b>{lat}</b>, 경도:<b>{lng}</b>, 해당 주소의 예상 매출은 <b>{eval_val}</b> 원, 주위 상권 대비 예상매출액 비율은 <b>{eval_norm}</b>.",
         "style": {"background": "grey", "color": "white", "font-family": '"Helvetica Neue", Arial', "z-index": "10000"},

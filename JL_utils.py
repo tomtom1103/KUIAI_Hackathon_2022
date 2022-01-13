@@ -6,23 +6,11 @@ from numpy import cos, sin, arcsin, sqrt
 from math import radians
 import streamlit as st
 
-'''school_data = pd.read_csv(
-    ".\data_upload_buzz\school_data_loc.csv", encoding="cp949", index_col=0)
-subway_data = pd.read_csv(
-    ".\data_upload_buzz\subway_data_loc.csv", encoding="cp949", index_col=0)
-mart_data = pd.read_csv(
-    ".\data_upload_buzz\mart_data_loc.csv", encoding="cp949", index_col=0)
-com_area_data = pd.read_csv(".\data_upload_buzz\상권좌표.csv",
-                          encoding="cp949",
-                          usecols=["상권_코드_명","위도","경도"])'''
-
-
 # KAKAO API 이용하여, 도로명 주소를 EPSG:4326 (aka WGS84, 위도 경도)로 변환
 def get_location(address):
     result = ""
     url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + address
     header = {'Authorization': 'KakaoAK ' + st.secrets['kakao_api']}
-    # api는 configure파일에 숨겨놓기!
     r = requests.get(url, headers=header)
 
     if r.status_code == 200:  # 정상 리턴만 반응

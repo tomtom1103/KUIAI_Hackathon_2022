@@ -4,13 +4,10 @@ import numpy as np
 import pydeck as pdk
 from JL_utils2 import *
 import altair as alt
-from visualization import refactor
 
-#sales_eda_json_sparse 는 데이터 분포도 확인용.
+MAPBOX_API_KEY = st.secrets['map']  #Mapbox API Token
 
-MAPBOX_API_KEY = st.secrets['map']
-
-def sales_hexagon(): #위도경도에 상권이 몇개있는지. 총 13만개
+def sales_hexagon():
 
     sales_eda_data = pd.read_pickle("data_upload/sales_eda_json_sparse.pkl")
     layer = pdk.Layer(
@@ -31,69 +28,16 @@ def sales_hexagon(): #위도경도에 상권이 몇개있는지. 총 13만개
         longitude=center[0],
         latitude=center[1],
         zoom=10
-        #pitch=40.5,
-        #bearing=-27.36
         )
 
     r = pdk.Deck(layers=[layer], initial_view_state=view_state)
     return r
 
-# 주간/성별/연령대별
-# 매출 비율, 매출 금액, 매출 건수
-
 
 def polygon():
 
-    df = pd.read_pickle('data_upload/sales_eda_full.pkl')
-    seoul = pd.read_pickle('data_upload/seoul_coord_data.pkl')
-    ch_1 = ['Select', '주간', '성별', '연령대별']
-    ch_2 = ['Select', '매출 비율', '매출 금액', '매출 건수']
-
-    '''
-    with st.form('form'):
-
-        o1 = st.selectbox('보고싶은 Data 대분류:', ch_1)
-        o2 = st.selectbox('보고싶은 Data 중분류:', ch_2)
-
-        option1 = o1+' '+o2
-        submitted = st.form_submit_button("Submit")
-
-        if submitted:
-
-            if '주간 매출 비율' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', week_ratio)
-
-            elif '주간 매출 금액' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', week_sale)
-
-            elif '주간 매출 건수' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', week_count)
-
-            elif '성별 매출 비율' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', sex_ratio)
-
-            elif '성별 매출 금액' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', sex_sale)
-
-            elif '성별 매출 건수' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', sex_count)
-
-            elif '연령대별 매출 비율' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', age_ratio)
-
-            elif '연령대별 매출 금액' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', age_sale)
-
-            elif '연령대별 매출 건수' in option1:
-                cl = st.selectbox('보고싶은 Data 를 선택하세요:', age_count)
-
-
-            colname = cl
-            submitted = st.form_submit_button("Run")
-
-            if submitted:
-    '''
-
+    df = pd.read_pickle('data_upload/sales_eda_full.pkl') #전체 매출 Data
+    seoul = pd.read_pickle('data_upload/seoul_coord_data.pkl') #서울시 동별 Multipolygon GeoJson 정보
     colname = st.selectbox('보고싶은 Data 를 선택하세요:', colnames)
 
     adder = []
@@ -137,8 +81,6 @@ def polygon():
         )
 
     r = pdk.Deck(layers=[layer],
-                 #map_style='mapbox://styles/mapbox/outdoors-v11',
-                 #mapbox_key=MAPBOX_API_KEY,
                  map_provider='mapbox',
                  initial_view_state=view_state)
     return r
@@ -154,7 +96,7 @@ def static():
     stores = st.multiselect(
         "서울시 주요 업종들", options=storetype, default=storetype
     )
-    #df['업종'] = df['업종'].isin(stores)
+
     chart = (
         alt.Chart(
             df,
@@ -169,10 +111,9 @@ def static():
     )
     st.altair_chart(chart, use_container_width=True)
 
-
 def eda():
     st.subheader("Explanatory Data Analysis")
-    options = ['Select Data','동별 Polygon 분석','업종별 Altair 분석','hextest']
+    options = ['Select Data','동별 Polygon 분석','업종별 Altair 분석', '서울시 상권 분포 Hexagon Visualization']
     option = st.selectbox("Select EDA Type", options)
 
     if option == "동별 Polygon 분석":
@@ -190,7 +131,7 @@ def eda():
         static()
         st.write(write2)
 
-    elif option =='hextest':
+    elif option =='서울시 상권 분포 Hexagon Visualization':
         st.pydeck_chart(sales_hexagon())
 
 
