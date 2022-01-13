@@ -30,7 +30,13 @@ def sales_hexagon():
         zoom=10
         )
 
-    r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+    tooltip = {
+        "html": "위도:<b>{lat}</b>, 경도:<b>{lng}</b>",
+        "style": {"background": "grey", "color": "white", "font-family": '"Helvetica Neue", Arial', "z-index": "10000"},
+    }
+
+
+    r = pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip = tooltip)
     return r
 
 
