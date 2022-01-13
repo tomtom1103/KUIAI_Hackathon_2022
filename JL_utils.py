@@ -180,7 +180,7 @@ def commercial_area(com):
 # 주변 학교 정보를 출력하는 함수
 def school_index_info(address_input, sectors):
     school_data = pd.read_csv(
-        ".\data_upload_buzz\school_data_loc.csv", encoding="cp949", usecols=["위도", "경도"])
+        "data_upload_buzz/school_data_loc.csv", encoding="cp949", usecols=["위도", "경도"])
     division = commercial_area(sectors)  # 1 2차 상권 기준
     if address_input is str:
         address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
@@ -212,7 +212,7 @@ def school_index_info(address_input, sectors):
 # 주변 지하철 정보를 출력하는 함수
 def subway_index_info(address_input, sectors):
     subway_data = pd.read_csv(
-        ".\data_upload_buzz\subway_data_loc.csv", encoding="cp949", usecols=["위도", "경도"])
+        "data_upload_buzz/subway_data_loc.csv", encoding="cp949", usecols=["위도", "경도"])
     division = commercial_area(sectors)  # 1 2차 상권 기준
     if address_input is str:
         address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
@@ -244,7 +244,7 @@ def subway_index_info(address_input, sectors):
 # 주변 마트 정보를 출력하는 함수
 def mart_index_info(address_input, sectors):
     mart_data = pd.read_csv(
-        ".\data_upload_buzz\mart_data_loc.csv", encoding="cp949", usecols=["위도", "경도"])
+        "data_upload_buzz/mart_data_loc.csv", encoding="cp949", usecols=["위도", "경도"])
     division = commercial_area(sectors)  # 1 2차 상권 기준
     if address_input is str:
         address_input_loc = get_location_naver(address_input)  # 입력 주소를 WGS84로 변환
@@ -282,7 +282,7 @@ def school_info(index_list=[], *args):
        '적재일시', '위도', '경도', 'temp_dist']'''
 
     school_data = pd.read_csv(
-        ".\data_upload_buzz\school_data_loc.csv", encoding="cp949", index_col=0)
+        "data_upload_buzz/school_data_loc.csv", encoding="cp949", index_col=0)
 
     return school_data.loc[index_list][list(args)]
 
@@ -293,7 +293,7 @@ def school_info(index_list=[], *args):
 def subway_info(index_list=[], *args):
     '''['역번호', '호선', '역명', '역전화번호', '도로명주소', '위도', '경도']'''
     subway_data = pd.read_csv(
-        ".\data_upload_buzz\subway_data_loc.csv", encoding="cp949", index_col=0)
+        "data_upload_buzz/subway_data_loc.csv", encoding="cp949", index_col=0)
 
     return subway_data.loc[index_list][list(args)]
 
@@ -307,7 +307,7 @@ def mart_info(index_list=[], *args):
        '사업장명', '최종수정일자', '데이터갱신구분', '데이터갱신일자', '업태구분명', '좌표정보(X)', '좌표정보(Y)',
        '점포구분명', '위도', '경도']'''
     mart_data = pd.read_csv(
-        ".\data_upload_buzz\mart_data_loc.csv", encoding="cp949", index_col=0)
+        "data_upload_buzz/mart_data_loc.csv", encoding="cp949", index_col=0)
     return mart_data.loc[index_list][list(args)]
 
     # 예시 mart_info([1,2,3],'사업장명','전화번호','도로명주소')
@@ -315,7 +315,7 @@ def mart_info(index_list=[], *args):
 
 # 가까운 상권을 return 하는 함수
 def get_nearest_com(address_input):
-    com_area_data = pd.read_csv(".\data_upload_buzz\상권좌표.csv",
+    com_area_data = pd.read_csv("data_upload_buzz/상권좌표.csv",
                                 encoding="cp949",
                                 usecols=["상권_코드_명", "위도", "경도"])
     com_area_data["temp_dist"] = ""  # 임시로 상권과 입력위치간의 거리를 기록하는 column을 만듬
@@ -329,7 +329,7 @@ def get_nearest_com(address_input):
 
 # 상권 구분 결과 return 하는 함수
 def get_comm_type(comm):
-    com_area_data = pd.read_csv(".\data_upload_buzz\상권좌표.csv",
+    com_area_data = pd.read_csv("data_upload_buzz/상권좌표.csv",
                                 encoding="cp949",
                                 usecols=["상권_코드_명", "상권_구분_코드_명"])
 
@@ -339,7 +339,7 @@ def get_comm_type(comm):
 # 건축물 생애이력 데이터 (일반/집합), (용도) return 하는 함수
 
 def get_building_info(address):
-    building_data = pd.read_csv(".\data_upload_buzz\df_concat.csv",
+    building_data = pd.read_csv("data_upload_buzz/df_concat.csv",
                                 encoding="cp949",
                                 usecols=["도로명주소","일반/집합 구분", "용도"])
 
