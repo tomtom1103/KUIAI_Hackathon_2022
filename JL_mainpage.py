@@ -16,7 +16,7 @@ def main():
     storetype = storetype_df['업종'].unique().tolist()
 
     with st.form("main1"):
-        road = st.text_input("도로명주소를 입력하세요: ")
+        road = st.text_input("도로명주소를 입력하세요 (실험용으로 고려대로 26길 45-4 를 입력해보세요! 고대생들의 마음의 고향 춘자입니다🍺): ")
         store = st.selectbox("업종을 선택하세요: ", storetype)
 
         submitted = st.form_submit_button("Submit")
