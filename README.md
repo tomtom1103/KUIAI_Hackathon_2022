@@ -34,7 +34,7 @@
 
 **PriceWeights.pt, SalesPrice.pt** are the trained weights for the main_engine.py to function.
 
-**requirements.txt** is the req. file for the web app to function.
+**requirements.txt** is the req. file for the web app to function!
 
 ***
 
