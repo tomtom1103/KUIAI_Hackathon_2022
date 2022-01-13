@@ -24,22 +24,27 @@ def main_input(address = "서울특별시 성북구 고려대로26길 45-4", sec
         break  # ❸ 반복 중지
 
     #주변 정보 받음
+    main_list = list(position)
+    main_list.append(address)
     pos_list=around_place(address)
+    pos_list.insert(0,main_list )
+    return pos_list, sector
+   # return , sector #앞에 메인 리스트를 넣어줌
 
-    return pos_list.insert(0, list(position).append(address)), sector #앞에 메인 리스트를 넣어줌
 
 
+def main_engine(a,b):
 
-def main_engine():
+    pos_list, sector = main_input(a,b)
 
-    pos_list, sector = main_input()
+
 
     result_list=[]
 
-    for position in pos_list:
+    for positions in pos_list:
 
-        position = tuple(position[0:2])
-        address = position[2]
+        position = tuple(positions[0:2])
+        address = positions[2]
 
         # 지하철, 학교, 마트 1,2,차 갯수 받아옴
         school_index_data = school_index_info(position,sector)
@@ -63,5 +68,5 @@ def main_engine():
         #이를 모델에 넣어줌
         eval_val = evaluation(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2 )
 
-        result_list.append(position,eval_val)
+        result_list.append([position,eval_val])
     return result_list
