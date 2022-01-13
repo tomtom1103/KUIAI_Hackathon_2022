@@ -173,7 +173,7 @@ def static():
 
 def eda():
     st.subheader("Explanatory Data Analysis")
-    options = ['Select Data','동별 Polygon 분석','업종별 Altair 분석']
+    options = ['Select Data','동별 Polygon 분석','업종별 Altair 분석','hextest']
     option = st.selectbox("Select EDA Type", options)
 
     if option == "동별 Polygon 분석":
@@ -190,6 +190,9 @@ def eda():
     elif option == '업종별 Altair 분석':
         static()
         st.write(write2)
+
+    elif option =='hextest':
+        st.pydeck_chart(sales_hexagon())
 
 
 # 주간/성별/연령대별
