@@ -47,9 +47,6 @@ class SalesPredictionNN(nn.Module):
         return x
 
 
-
-
-
 def evaluation(gen_aggr_cl="일반", usage="제2종근린생활시설", sector="한식음식점", com_dist="전통시장", sub1=0, sub2=0, sch1=0, sch2=0, mart1=0, mart2=0):
 
     # Embedding
@@ -69,14 +66,16 @@ def evaluation(gen_aggr_cl="일반", usage="제2종근린생활시설", sector="
     com_dist_dict = {'골목상권': 0, '발달상권': 1, '전통시장': 2}
     
     #임베딩 시킨 명목형 변수와 연속형 변수를 텐서화
-    cat_features = np.stack([gen_aggr_cl_dict[gen_aggr_cl], usage_dict[usage], sector_dict[sector],com_dist_dict[com_dist] ], axis=1)
-    cat_features = torch.tensor(cat_features, dtype=torch.int64)
+    cat_features = np.array([gen_aggr_cl_dict[gen_aggr_cl], usage_dict[usage], sector_dict[sector],com_dist_dict[com_dist] ])
+    cat_features = torch.tensor(cat_features.reshape(1,4), dtype = torch.int64)
 
-    cont_features = np.stack(sub1, sub2, sch1, sch2, mart1, mart2)
-    cont_features = torch.tensor(cont_features, dtype=torch.float)
+    cont_features = np.array([sub1, sub2, sch1, sch2, mart1, mart2])
+    cont_features = torch.tensor(cont_features.reshape(1,6), dtype= torch.float)
     
     #후 학습시킨 모델에 적용
-    model1 = SalesPredictionNN([2, 3, 63, 3], 6, [100, 50], 1, p=0.4)
+    model1=SalesPredictionNN([2, 3, 63, 3],6,[100,50],1,p=0.4)
     model1.load_state_dict(torch.load('PriceWeights.pt'))
+    model1.eval()
 
+    #return (cat_features, cont_features)
     return  model1(cat_features, cont_features).item()

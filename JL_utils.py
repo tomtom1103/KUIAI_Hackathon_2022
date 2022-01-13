@@ -333,7 +333,7 @@ def get_comm_type(comm):
                                 encoding="cp949",
                                 usecols=["상권_코드_명", "상권_구분_코드_명"])
 
-    return com_area_data[com_area_data["상권_코드_명"] == comm]["상권_구분_코드_명"]
+    return com_area_data[com_area_data["상권_코드_명"] == comm]["상권_구분_코드_명"].item()
 
 
 # 건축물 생애이력 데이터 (일반/집합), (용도) return 하는 함수

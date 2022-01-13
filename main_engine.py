@@ -45,11 +45,23 @@ if __name__ == "__main__":
     #건축물 생애이력 데이터 (일반/집합), (용도)
 
     gen_aggr_cl, usage = get_building_info(address)
-ㅡ
-    print(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2)
-    print(type(gen_aggr_cl), type(usage), type(sector), type(com_type), type(sub1), type(sub2), type(sch1), type(sch2), type(mart1), type(mart2))
+
+    '''print("gen_aggr_cl", gen_aggr_cl, type(gen_aggr_cl))
+    print("usage", usage, type(usage))
+    print("sector", sector, type(sector))
+    print("com_type", com_type, type(com_type))
+    print("sub1", sub1, type(sub1))
+    print("sub2", sub2, type(sub1))
+    print("sch1", sch1, type(sch1))
+    print("sch2", sch2, type(sch2))
+    print("mart1", mart1, type(mart1))
+    print("mart2", mart2, type(mart2))'''
+
+
+    '''print(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2)
+    print(type(gen_aggr_cl), type(usage), type(sector), type(com_type), type(sub1), type(sub2), type(sch1), type(sch2), type(mart1), type(mart2))'''
 
     #이를 모델에 넣어줌
-    #eval_val = evaluation(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2 )
+    eval_val = evaluation(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2 )
 
-    #eval_val
+    print(eval_val)
