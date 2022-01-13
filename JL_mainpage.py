@@ -82,5 +82,8 @@ def main():
 
 def mainpage():
     st.subheader("Main Engine")
+    st.write('Main Engine 은 사용자가 해당 도로명주소에 해당 업종으로 창업을 한다면 분기당 예상 매출액,')
+    st.write('그리고 반경 500미터의 동종업종의 예상 매출액을 동적으로 계산하여 Interactive Map 에 시각화 하는 Tool 입니다.')
+    st.write('표시되는 모든 점포들은 서울시 우리마을가게 상권분석 Data 와 판매/제1종근린시설/제2종근린시설 건축물 생애이력 Data 를 기반으로 합니다.')
     st.pydeck_chart(main())
     st.markdown(main_md1)
