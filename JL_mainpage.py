@@ -20,9 +20,9 @@ def main():
             st.stop()
 
     st.write('test')
-    main_engine(road, store)
+    #main_engine(road, store)
 
-    #st.write(main_engine(road, store))
+    st.write(main_engine(road, store))
 
 
 def mainpage():
