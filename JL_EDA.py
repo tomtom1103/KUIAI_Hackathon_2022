@@ -99,17 +99,10 @@ def polygon():
 
 def static():
     df = pd.read_pickle('data_upload/moneypertypeofservice.pkl')
-    storetype = df['업종'].unique().tolist()
     cols = df.columns.tolist()
     cols = cols[1:]
 
     data = st.selectbox('확인할 Data 를 선택하세요: ', cols)
-    '''
-    stores = st.multiselect(
-        "서울시 주요 업종들", options=storetype, default=storetype
-    )
-    '''
-
     chart = (
         alt.Chart(
             df,
@@ -138,15 +131,9 @@ def eda():
         code = code1
         st.code(code,language='python')
 
-        st.markdown(md1)
-
     elif option == '업종별 Altair 분석':
         static()
         st.write(write2)
 
     elif option =='서울시 상권 분포 Hexagon Visualization':
         st.pydeck_chart(sales_hexagon())
-
-
-# 주간/성별/연령대별
-# 매출 비율, 매출 금액, 매출 건수
