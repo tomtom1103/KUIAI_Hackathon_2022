@@ -75,7 +75,6 @@ def polygon():
         auto_highlight=True,
         extruded=True,
 
-
     )
 
     center = [126.986, 37.565]
@@ -86,8 +85,15 @@ def polygon():
 
         )
 
+    tooltip = {
+        "html": "<b>{temp}</b>, 분기당 매출 건수:<b>{분기당_매출_건수_full}</b>, 점포수: <b>{점포수_full}",
+        "style": {"background": "grey", "color": "white", "font-family": '"Helvetica Neue", Arial', "z-index": "10000"},
+    }
+
+
     r = pdk.Deck(layers=[layer],
                  map_provider='mapbox',
+                 tooltip=tooltip,
                  initial_view_state=view_state)
     return r
 
@@ -98,10 +104,11 @@ def static():
     cols = cols[1:]
 
     data = st.selectbox('확인할 Data 를 선택하세요: ', cols)
-
+    '''
     stores = st.multiselect(
         "서울시 주요 업종들", options=storetype, default=storetype
     )
+    '''
 
     chart = (
         alt.Chart(
