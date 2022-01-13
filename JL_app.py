@@ -14,25 +14,24 @@ def journeylee_app():
         }
         </style>
         """, unsafe_allow_html=True)
-    st.title("Journey Lee: KUIAI Hackathon")
+    st.title("Journey Lee: KUIAI Hackathon🧑‍💻")
     st.sidebar.title("Journey Lee: KUIAI Hackathon")
     app_mode = st.sidebar.radio(
         "Go to", ("Main Page", "Explanatory Data Analysis", "About the Creators🚀")
     )
 
     st.sidebar.info(
-        "Journey Lee: KUIAI Hackathon"
-        ""
-        "Jong Hyun Lee"
-        ""
-        "Woo Jun Lee"
+        '''
+        Journey Lee is a collaborative effort for the 2022 KUIAI Hackathon for Korea University.
+        It was made from scratch by Thomas and John Lee between the course of 72 Hours. Enjoy!🐯 
+        
+        '''
 
     )
 
     if app_mode == "Main Page":
         mainpage()
     elif app_mode == "Explanatory Data Analysis":
-        #eda()
         eda()
     elif app_mode ==  "About the Creators🚀":
         info()

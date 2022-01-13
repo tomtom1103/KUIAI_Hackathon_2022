@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
-import math
 from config import map
-from JL_utils2 import colnames, areas
+from JL_utils2 import *
+import altair as alt
 from visualization import refactor
 
 #sales_eda_json_sparse 는 데이터 분포도 확인용.
@@ -39,110 +39,63 @@ def sales_hexagon(): #위도경도에 상권이 몇개있는지. 총 13만개
     r = pdk.Deck(layers=[layer], initial_view_state=view_state)
     return r
 
-
-def normalized_polygon(): #각 동별 매출 정규화
-    df = pd.read_pickle('data_upload/sales_eda_3rd.pkl')
-
-    layer = pdk.Layer(
-        'PolygonLayer',
-        df,
-        get_polygon='coordinates',
-        get_fill_color='[0, 800*지역별매출정규화,0]',
-        pickable=True,
-        auto_highlight=True,
-        extruded=True,
+# 주간/성별/연령대별
+# 매출 비율, 매출 금액, 매출 건수
 
 
-    )
+def polygon():
 
-    center = [126.986, 37.565]
-    view_state = pdk.ViewState(
-        longitude=center[0],
-        latitude=center[1],
-        zoom=10
-
-        )
-
-
-    r = pdk.Deck(layers=[layer],
-                 #map_style='mapbox://styles/mapbox/outdoors-v11',
-                 #mapbox_key=MAPBOX_API_KEY,
-                 map_provider='mapbox',
-                 initial_view_state=view_state)
-    return r
-
-def sales_scatterplot():
-
-    sales_eda_data = pd.read_pickle("data_upload/sales_eda_json_sparse.pkl")
-    layer = pdk.Layer(
-        'ScatterplotLayer',
-        sales_eda_data,
-        get_position='[lng, lat]',
-        get_radius=50,
-        get_fill_color='[255, 255, 255]',
-        pickable=True,
-        auto_highlight=True
-    )
-
-    center = [126.986, 37.565]
-    view_state = pdk.ViewState(
-        longitude=center[0],
-        latitude=center[1],
-        zoom=10)
-
-    r = pdk.Deck(layers=[layer],
-                 initial_view_state=view_state,
-                 )
-    return r
-
-def sales_heatmap():
-    sales_eda_data = pd.read_pickle("data_upload/sales_eda_json_sparse.pkl")
-
-    layer = pdk.Layer(
-        'HeatmapLayer',
-        sales_eda_data,
-        get_position='[lng, lat]',
-        intensity = 0.5
-    )
-
-    center = [126.986, 37.565]
-    view_state = pdk.ViewState(
-        longitude=center[0],
-        latitude=center[1],
-        zoom=10.5)
-
-    r = pdk.Deck(layers=[layer], initial_view_state=view_state)
-    return r
-
-def sales_grid():
-    sales_eda_data = pd.read_pickle("data_upload/sales_eda_json_sparse.pkl")
-
-    layer = pdk.Layer(
-        'CPUGridLayer',  # 대용량 데이터의 경우 'GPUGridLayer'
-        sales_eda_data,
-        get_position='[lng, lat]',
-        pickable=True,
-        auto_highlight=True,
-        extruded=True,
-        elevation_scale=3
-    )
-
-    center = [126.986, 37.565]
-    view_state = pdk.ViewState(
-        longitude=center[0],
-        latitude=center[1],
-        zoom=10,
-        bearing=-15,
-        pitch=45
-        )
-
-    r = pdk.Deck(layers=[layer], initial_view_state=view_state)
-    return r
-
-def full():
     df = pd.read_pickle('data_upload/sales_eda_full.pkl')
     seoul = pd.read_pickle('data_upload/seoul_coord_data.pkl')
-    colname = st.selectbox('보고싶은 정보를 선택하세요:', colnames)
+    ch_1 = ['Select', '주간', '성별', '연령대별']
+    ch_2 = ['Select', '매출 비율', '매출 금액', '매출 건수']
+
+    '''
+    with st.form('form'):
+
+        o1 = st.selectbox('보고싶은 Data 대분류:', ch_1)
+        o2 = st.selectbox('보고싶은 Data 중분류:', ch_2)
+
+        option1 = o1+' '+o2
+        submitted = st.form_submit_button("Submit")
+
+        if submitted:
+
+            if '주간 매출 비율' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', week_ratio)
+
+            elif '주간 매출 금액' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', week_sale)
+
+            elif '주간 매출 건수' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', week_count)
+
+            elif '성별 매출 비율' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', sex_ratio)
+
+            elif '성별 매출 금액' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', sex_sale)
+
+            elif '성별 매출 건수' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', sex_count)
+
+            elif '연령대별 매출 비율' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', age_ratio)
+
+            elif '연령대별 매출 금액' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', age_sale)
+
+            elif '연령대별 매출 건수' in option1:
+                cl = st.selectbox('보고싶은 Data 를 선택하세요:', age_count)
+
+
+            colname = cl
+            submitted = st.form_submit_button("Run")
+
+            if submitted:
+    '''
+
+    colname = st.selectbox('보고싶은 Data 를 선택하세요:', colnames)
 
     adder = []
     for area in areas:
@@ -150,15 +103,25 @@ def full():
 
     df_new = pd.DataFrame()
     df_new['temp'] = areas
-    df_new[colname + '_full'] = adder
+    df_new[colname + '_new'] = adder
     df_new = pd.merge(df_new, seoul, on='temp')
-    df_new[f'{colname}_정규화'] = df_new[f'{colname}_full'] / df_new[f'{colname}_full'].max()
+
+    if '매출_금액' in colname:
+        df_new[f'{colname}_new_per_payment'] = (df_new[f'{colname}_new'] / seoul['분기당_매출_건수_full']) / seoul['점포수_full'] #매출금액 데이터는 해당 동의 매출건수와 점포수로 나눠준다
+        df_new[f'{colname}_정규화'] = df_new[f'{colname}_new_per_payment'] / df_new[f'{colname}_new_per_payment'].max() #그리고 정규화
+
+    elif '매출_건수' in colname:
+        df_new[f'{colname}_new_per_store'] = df_new[f'{colname}_new'] / seoul['점포수_full'] #매출건수 데이터는 해당 동의 점포수로 나눠준다
+        df_new[f'{colname}_정규화'] = df_new[f'{colname}_new'] / df_new[f'{colname}_new'].max() #정규화
+
+    else:
+        df_new[f'{colname}_정규화'] = df_new[f'{colname}_new'] / df_new[f'{colname}_new'].max() #매출비율 데이터는 바로 정규화
 
     layer = pdk.Layer(
         'PolygonLayer',
         df_new,
         get_polygon='coordinates',
-        get_fill_color=f'[0, 800*{colname}_정규화 ,0]',
+        get_fill_color=f'[0, 1000*{colname}_정규화 ,0]',
         pickable=True,
         auto_highlight=True,
         extruded=True,
@@ -181,48 +144,53 @@ def full():
                  initial_view_state=view_state)
     return r
 
+def static():
+    df = pd.read_pickle('data_upload/moneypertypeofservice.pkl')
+    storetype = df['업종'].unique().tolist()
+    cols = df.columns.tolist()
+    cols = cols[1:]
 
+    data = st.selectbox('확인할 Data 를 선택하세요: ', cols)
+
+    stores = st.multiselect(
+        "서울시 주요 업종들", options=storetype, default=storetype
+    )
+    #df['업종'] = df['업종'].isin(stores)
+    chart = (
+        alt.Chart(
+            df,
+            title=f"{data}",
+        )
+            .mark_bar()
+            .encode(
+            x=alt.X(f"{data}", title="VALUES"),
+            y=alt.Y("업종", sort=alt.EncodingSortField(field=f"{data}", order="descending")),
+            tooltip=["업종", "업종별_분기당_매출_건수", "업종별_분기당_매출_금액(억원)","업종별_평균_건수당_매출액(만원)"],
+        )
+    )
+    st.altair_chart(chart, use_container_width=True)
 
 
 def eda():
-    st.title("Explanatory Data Analysis")
-    options = ['Select Data',"전체 상권의 분포도", "동별 매출 비율", "Scatterplot test", "Heatmap test", "Gridmap test",'full']
+    st.subheader("Explanatory Data Analysis")
+    options = ['Select Data','동별 Polygon 분석','업종별 Altair 분석']
     option = st.selectbox("Select EDA Type", options)
 
-    if option == "Select Data":
-        st.write("")
+    if option == "동별 Polygon 분석":
+        st.pydeck_chart(polygon())
+        st.write(write1)
 
-    elif option == '전체 상권의 분포도':
-        st.header("전체 상권의 분포도")
-        st.pydeck_chart(sales_hexagon())
-        st.write(
-            '''
-            이 Hexagon Map 은 약 13만개의 판매시설, 제 1종 근린시설, 제 2종 근린시설의 서울 분포도를 나타냅니다.
-            '''
+        st.markdown('##### Snippet')
 
-        )
+        code = code1
+        st.code(code,language='python')
 
-    elif option == '동별 매출 비율':
-        st.header("동별 매출 비율")
-        st.pydeck_chart(normalized_polygon())
-        st.write(
-            '''
-            이 Polygon Map은 서울의 동별 상권의 매출을 정규화한 비율을 나타냅니다.
-            '''
-            '''
-            색이 짙을수록 분기당 더 높은 매출을 보였습니다.
-            '''
+        st.markdown(md1)
 
-        )
+    elif option == '업종별 Altair 분석':
+        static()
+        st.write(write2)
 
-    elif option == 'Scatterplot test':
-        st.pydeck_chart(sales_scatterplot())
 
-    elif option == "Heatmap test":
-        st.pydeck_chart(sales_heatmap())
-
-    elif option == "Gridmap test":
-        st.pydeck_chart(sales_grid())
-
-    elif option == 'full':
-        st.pydeck_chart(full())
+# 주간/성별/연령대별
+# 매출 비율, 매출 금액, 매출 건수
