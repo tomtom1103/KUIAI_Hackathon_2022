@@ -126,7 +126,7 @@ def static():
 
 def eda():
     st.subheader("Explanatory Data Analysis")
-    options = ['Select Data','동별 Polygon 분석','업종별 Altair 분석', '서울시 상권 분포 Hexagon Visualization']
+    options = ['동별 Polygon 분석', '업종별 Altair 분석', '서울시 상권 분포 Hexagon Visualization']
     option = st.selectbox("Select EDA Type", options)
 
     if option == "동별 Polygon 분석":
