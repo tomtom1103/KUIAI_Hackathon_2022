@@ -1,5 +1,6 @@
 from JL_utils import commercial_area, get_location_naver, subway_index_info, school_index_info, mart_index_info, get_nearest_com, get_comm_type, get_building_info
 from model import  evaluation
+import streamlit as st
 
 # input 부분 정의
 def input_engine(address = "서울특별시 성북구 고려대로26길 45-4", sectors = "호프-간이주점"):
@@ -25,8 +26,9 @@ def input_engine(address = "서울특별시 성북구 고려대로26길 45-4", s
 
 
 
-if __name__ == "__main__":
-    position, address, sector= input_engine() #주소와 업종명 받아서 좌표와 업종명 보냄
+def main_engine(a,b):
+
+    position, address, sector= input_engine(a,b) #주소와 업종명 받아서 좌표와 업종명 보냄
     # 지하철, 학교, 마트 1,2,차 갯수 받아옴
     school_index_data = school_index_info(position,sector)
     subway_index_data = subway_index_info(position,sector)
@@ -63,5 +65,5 @@ if __name__ == "__main__":
 
     #이를 모델에 넣어줌
     eval_val = evaluation(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2 )
-
-    eval_val
+    st.write(eval_val)
+    #return eval_val

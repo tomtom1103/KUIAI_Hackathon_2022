@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from JL_utils import *
-from main_engine import input_engine
+from main_engine import main_engine
 
 def main():
     df = pd.read_pickle('data_upload/sales_eda_full.pkl')
@@ -20,8 +20,9 @@ def main():
             st.stop()
 
     st.write('test')
+    main_engine(road, store)
 
-    st.write(input_engine(road, store))
+    #st.write(main_engine(road, store))
 
 
 def mainpage():
