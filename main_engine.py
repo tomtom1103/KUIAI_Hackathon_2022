@@ -40,7 +40,6 @@ def main_engine(a,b):
 
 
     result_list=[]
-
     for positions in pos_list:
 
         position = tuple(positions[0:2])
@@ -69,4 +68,6 @@ def main_engine(a,b):
         eval_val = evaluation(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2 )
 
         result_list.append([position,eval_val])
+        if len(result_list)=100:
+            break
     return result_list
