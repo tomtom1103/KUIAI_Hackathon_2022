@@ -5,7 +5,6 @@ from JL_utils import *
 from JL_utils2 import main_md1
 from main_engine import main_engine
 import pydeck as pdk
-from config import map
 
 MAPBOX_API_KEY = st.secrets['map']
 

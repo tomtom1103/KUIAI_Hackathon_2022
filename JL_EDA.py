@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
-from config import map
 from JL_utils2 import *
 import altair as alt
 from visualization import refactor

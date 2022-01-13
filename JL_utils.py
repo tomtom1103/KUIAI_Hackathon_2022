@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
 from haversine import haversine
-from config import kakao_api, naver_client_id, naver_client_secert
 from urllib import parse
 from numpy import cos, sin, arcsin, sqrt
 from math import radians
