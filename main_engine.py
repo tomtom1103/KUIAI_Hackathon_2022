@@ -64,4 +64,4 @@ if __name__ == "__main__":
     #이를 모델에 넣어줌
     eval_val = evaluation(gen_aggr_cl, usage, sector, com_type, sub1, sub2, sch1, sch2, mart1, mart2 )
 
-    print(eval_val)
+    eval_val

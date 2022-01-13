@@ -2,5 +2,4 @@
 *.ipynb
 config.py
 *.xlsx
-*.csv
 *.html
