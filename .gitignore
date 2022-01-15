@@ -5,3 +5,4 @@ config.py
 *.html
 .streamlit
 .toml
+preprocessing_raw
