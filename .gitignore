@@ -6,3 +6,6 @@ config.py
 .streamlit
 .toml
 preprocessing_raw
+.DS_Store
+.idea
+__pycache__/
